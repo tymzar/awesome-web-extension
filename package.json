@@ -47,7 +47,7 @@
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "autoprefixer": "10.4.16",
-    "dotenv-cli": "7.2.1",
+    "dotenv-cli": "10.0.0",
     "esbuild": "0.18.0",
     "esbuild-plugin-clean": "1.0.1",
     "esbuild-plugin-copy": "2.1.1",
