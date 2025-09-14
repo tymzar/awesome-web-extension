@@ -3685,13 +3685,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*":
-  version: 15.7.15
-  resolution: "@types/prop-types@npm:15.7.15"
-  checksum: 10c0/b59aad1ad19bf1733cf524fd4e618196c6c7690f48ee70a327eb450a42aab8e8a063fbe59ca0a5701aebe2d92d582292c0fb845ea57474f6a15f6994b0e260b2
-  languageName: node
-  linkType: hard
-
 "@types/react-dom@npm:18.2.15":
   version: 18.2.15
   resolution: "@types/react-dom@npm:18.2.15"
@@ -3710,14 +3703,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.2.37":
-  version: 18.2.37
-  resolution: "@types/react@npm:18.2.37"
+"@types/react@npm:19.1.13":
+  version: 19.1.13
+  resolution: "@types/react@npm:19.1.13"
   dependencies:
-    "@types/prop-types": "npm:*"
-    "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10c0/79dd5d23da05bec54e7423ca17096e345eb8fd80a3bf8dd916bb5cdd60677d27c298523aa5b245d090fcc4ec100cfd58c1af4631fbac709d0a9d8be75f9d78a9
+  checksum: 10c0/75e35b54883f5ed07d3b5cb16a4711b6dbb7ec6b74301bcb9bfa697c9d9fff022ec508e1719e7b2c69e2e8b042faac1125be7717b5e5e084f816a2c88e136920
   languageName: node
   linkType: hard
 
@@ -3727,13 +3718,6 @@ __metadata:
   dependencies:
     sass: "npm:*"
   checksum: 10c0/e2628516d16f9232226a693ff5e512ef64445df3b675a17b84c7af865f68a1c1156b5d0e2b6b9341c571348f719b705ac8a622caa304ea5700755cb7019a0071
-  languageName: node
-  linkType: hard
-
-"@types/scheduler@npm:*":
-  version: 0.26.0
-  resolution: "@types/scheduler@npm:0.26.0"
-  checksum: 10c0/84626b06551ab7e1247412a2588430da5cd75263a353f1fd70593ca7331d43797937b89fe587089c6b3613d0658986087c5f0b2debef5bae831cdc1104a432ef
   languageName: node
   linkType: hard
 
@@ -4424,7 +4408,7 @@ __metadata:
     "@iconify/react": "npm:^6.0.0"
     "@playwright/test": "npm:^1.55.0"
     "@types/node": "npm:^24.4.0"
-    "@types/react": "npm:18.2.37"
+    "@types/react": "npm:19.1.13"
     "@types/react-dom": "npm:18.2.15"
     "@typescript-eslint/eslint-plugin": "npm:^8.0.0"
     "@typescript-eslint/parser": "npm:^8.0.0"
@@ -4443,7 +4427,7 @@ __metadata:
     knip: "npm:^5.63.1"
     postcss: "npm:^8.5.6"
     prettier: "npm:2.8.3"
-    react: "npm:18.2.0"
+    react: "npm:19.1.1"
     react-dom: "npm:18.2.0"
     tailwindcss: "npm:^3.4.0"
     typescript: "npm:^5.9.2"
@@ -7609,12 +7593,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:18.2.0":
-  version: 18.2.0
-  resolution: "react@npm:18.2.0"
-  dependencies:
-    loose-envify: "npm:^1.1.0"
-  checksum: 10c0/b562d9b569b0cb315e44b48099f7712283d93df36b19a39a67c254c6686479d3980b7f013dc931f4a5a3ae7645eae6386b4aa5eea933baa54ecd0f9acb0902b8
+"react@npm:19.1.1":
+  version: 19.1.1
+  resolution: "react@npm:19.1.1"
+  checksum: 10c0/8c9769a2dfd02e603af6445058325e6c8a24b47b185d0e461f66a6454765ddcaecb3f0a90184836c68bb509f3c38248359edbc42f0d07c23eb500a5c30c87b4e
   languageName: node
   linkType: hard
 
