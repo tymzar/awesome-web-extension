@@ -13,7 +13,7 @@
 
 ### Pre-requisites
 
-1. Use Node >= **18**.
+1. Use Node > **22.7.0**.
 2. Clone/Download this repository.
 3. Replace package's `name`, `description` and `repository` fields in `package.json`.
 4. Replace the name of extension in `src/manifest.json`.
@@ -78,7 +78,141 @@ PORT=3000
 
 Accordingly for `.env.production` file. Feel free to add any other variables you want to use.
 
+## Middleware System (useReducer)
+
+This extension includes a sophisticated middleware system built with React's `useReducer` for managing Chrome extension communication between content scripts and React components.
+
+### Features
+
+- **State Management**: Centralized state management using `useReducer`
+- **Type Safety**: Full TypeScript support for all actions and state
+- **Error Handling**: Comprehensive error states and loading indicators
+- **React Integration**: Easy integration with React components via context
+- **Chrome Extension Communication**: Seamless message passing between content scripts and React components
+- **Modern Architecture**: Pure `useReducer` implementation with no legacy code
+- **Cross-Context Support**: Works in both extension pages (popup, options) and regular web pages
+
+### How It Works
+
+The middleware system automatically detects its context and behaves accordingly:
+
+#### **Extension Pages** (Popup, Options)
+
+- Detects `chrome-extension:` protocol
+- Sends messages to active tab's content script using `chrome.tabs.sendMessage()`
+- Perfect for controlling web pages from extension UI
+
+#### **Content Scripts** (Regular Web Pages)
+
+- Detects regular web page context
+- Listens for messages using `chrome.runtime.onMessage.addListener()`
+- Executes DOM manipulation and responds to extension commands
+
+### Usage
+
+#### 1. Wrap your app with MiddlewareProvider
+
+```tsx
+import { MiddlewareProvider } from "./content/modules/middleware";
+
+function App() {
+  return (
+    <MiddlewareProvider>
+      <YourComponents />
+    </MiddlewareProvider>
+  );
+}
+```
+
+#### 2. Use the middleware in components
+
+```tsx
+import { useMiddleware } from "./content/modules/middleware";
+
+function MyComponent() {
+  const { state, actions } = useMiddleware();
+
+  const handleSendColors = () => {
+    chrome.runtime.sendMessage({
+      type: "POST_COLORS",
+      colors: ["#ff0000", "#00ff00", "#0000ff"],
+    });
+  };
+
+  return (
+    <div>
+      <p>Loading: {state.isLoading ? "Yes" : "No"}</p>
+      <p>Error: {state.error || "None"}</p>
+      <p>Color Boxes: {state.colorBoxes.length}</p>
+
+      <button onClick={handleSendColors}>Send Colors</button>
+      <button onClick={actions.clearColorBoxes}>Clear Boxes</button>
+    </div>
+  );
+}
+```
+
+### Available Actions
+
+- `setLoading(isLoading: boolean)` - Set loading state
+- `setError(error: string)` - Set error message
+- `setSuccess(response: ContentMessageResponse)` - Set success response
+- `addColorBox(id: string, color: string, element: HTMLElement)` - Add color box to state
+- `removeColorBox(id: string)` - Remove color box by ID
+- `clearColorBoxes()` - Clear all color boxes
+
+### State Structure
+
+```typescript
+interface MiddlewareState {
+  isLoading: boolean;
+  error: string | null;
+  lastResponse: ContentMessageResponse | null;
+  colorBoxes: Array<{
+    id: string;
+    color: string;
+    element: HTMLElement;
+  }>;
+}
+```
+
+### Message Types
+
+- `GET_BODY` - Retrieve document title and HTML body content from the active web page
+- `POST_COLORS` - Send color array to content script for rendering color boxes
+- `CLEAR_BOXES` - Clear all color boxes from the page
+
+### What Each Function Does
+
+#### **Get Body**
+
+- Retrieves the current web page's title and HTML content
+- Useful for page analysis, content extraction, or debugging
+- Shows page title and body length in the UI
+- Works on any website where the content script is injected
+
+#### **Send Colors**
+
+- Creates colored boxes on the web page
+- Each color becomes a 32x32px box positioned at the top
+- Automatically clears existing boxes before adding new ones
+- Great for visual testing and page manipulation
+
+#### **Clear Boxes**
+
+- Removes all color boxes from the web page
+- Cleans up both DOM elements and React state
+- Useful for resetting the page state
+
+### Examples in the Extension
+
+The middleware is demonstrated in:
+
+- **Popup**: Shows middleware state and provides buttons to test functionality
+- **Options**: Displays middleware state with enhanced UI and color palette sending
+
 ## Links
 
 - [Chrome Extension documentation](https://developer.chrome.com/extensions/getstarted)
 - [Webpack documentation](https://webpack.js.org/concepts/)
+- [React useReducer documentation](https://react.dev/reference/react/useReducer)

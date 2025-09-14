@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import type { PostColorsMessage } from "../content/modules/middleware/middleware.types";
 import { MESSAGE_TYPES } from "../content/modules/middleware/middleware.types";
 import {
+  MiddlewareProvider,
+  useMiddleware,
+} from "../content/modules/middleware";
+import {
   Button,
   Card,
   CardBody,
@@ -11,7 +15,180 @@ import {
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
 
-export function Popup(): JSX.Element {
+// Component that demonstrates middleware usage
+function MiddlewareDemo(): JSX.Element {
+  const { state, actions } = useMiddleware();
+
+  const handleSendColors = () => {
+    const colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00"];
+
+    // Send message to active tab's content script
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]?.id) {
+        chrome.tabs.sendMessage(
+          tabs[0].id,
+          {
+            type: MESSAGE_TYPES.POST_COLORS,
+            colors,
+          },
+          (response) => {
+            if (chrome.runtime.lastError) {
+              console.error("Error sending colors:", chrome.runtime.lastError);
+              actions.setError(
+                "Failed to send colors: " + chrome.runtime.lastError.message
+              );
+            } else if (response) {
+              console.log("Colors sent successfully:", response);
+              actions.setSuccess(response);
+            }
+          }
+        );
+      } else {
+        actions.setError("No active tab found");
+      }
+    });
+  };
+
+  const handleGetBody = () => {
+    // Send message to active tab's content script
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]?.id) {
+        chrome.tabs.sendMessage(
+          tabs[0].id,
+          {
+            type: MESSAGE_TYPES.GET_BODY,
+          },
+          (response) => {
+            if (chrome.runtime.lastError) {
+              console.error("Error getting body:", chrome.runtime.lastError);
+              actions.setError(
+                "Failed to get body: " + chrome.runtime.lastError.message
+              );
+            } else if (response) {
+              console.log("Body retrieved successfully:", response);
+              actions.setSuccess(response);
+            }
+          }
+        );
+      } else {
+        actions.setError("No active tab found");
+      }
+    });
+  };
+
+  const handleClearBoxes = () => {
+    // Send message to active tab's content script
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (tabs[0]?.id) {
+        chrome.tabs.sendMessage(
+          tabs[0].id,
+          {
+            type: MESSAGE_TYPES.CLEAR_BOXES,
+          },
+          (response) => {
+            if (chrome.runtime.lastError) {
+              console.error("Error clearing boxes:", chrome.runtime.lastError);
+              actions.setError(
+                "Failed to clear boxes: " + chrome.runtime.lastError.message
+              );
+            } else if (response) {
+              console.log("Boxes cleared successfully:", response);
+              actions.setSuccess(response);
+            }
+          }
+        );
+      } else {
+        actions.setError("No active tab found");
+      }
+    });
+  };
+
+  return (
+    <Card className="mb-4 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <Icon
+            icon="mdi:code-braces"
+            className="text-xl text-blue-600 dark:text-blue-400"
+          />
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+            Middleware Demo (useReducer)
+          </h3>
+          <div className="text-xs text-gray-500 dark:text-gray-400">
+            Open a web page first, then try the buttons
+          </div>
+        </div>
+      </CardHeader>
+      <Divider className="bg-blue-200 dark:bg-blue-700" />
+      <CardBody>
+        <div className="space-y-3">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
+            <strong>State:</strong> Loading: {state.isLoading ? "Yes" : "No"} |
+            Error: {state.error || "None"} | Color Boxes:{" "}
+            {state.colorBoxes.length}
+          </div>
+
+          {state.error && (
+            <div className="text-xs text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-2 rounded">
+              <strong>Error:</strong> {state.error}
+            </div>
+          )}
+
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              color="primary"
+              variant="flat"
+              onPress={handleSendColors}
+              startContent={<Icon icon="mdi:palette" />}
+            >
+              Send Colors
+            </Button>
+            <Button
+              size="sm"
+              color="secondary"
+              variant="flat"
+              onPress={handleGetBody}
+              startContent={<Icon icon="mdi:web" />}
+            >
+              Get Body
+            </Button>
+            <Button
+              size="sm"
+              color="danger"
+              variant="flat"
+              onPress={handleClearBoxes}
+              startContent={<Icon icon="mdi:delete" />}
+            >
+              Clear Boxes
+            </Button>
+          </div>
+
+          {state.lastResponse && (
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              <strong>Last Response:</strong>{" "}
+              {JSON.stringify(state.lastResponse.message.status)}
+              {"title" in state.lastResponse.message && (
+                <div className="mt-1">
+                  <strong>Page Title:</strong>{" "}
+                  {state.lastResponse.message.title}
+                </div>
+              )}
+              {"body" in state.lastResponse.message && (
+                <div className="mt-1">
+                  <strong>Body Length:</strong>{" "}
+                  {state.lastResponse.message.body.length} characters
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </CardBody>
+    </Card>
+  );
+}
+
+function PopupContent(): JSX.Element {
   const [elementsLimit, setElementsLimit] = useState(1);
   const [elements, setElements] = useState<Array<string>>([]);
 
@@ -76,6 +253,7 @@ export function Popup(): JSX.Element {
 
   return (
     <div className="h-full p-4 bg-gray-50 dark:bg-gray-900 transition-colors">
+      <MiddlewareDemo />
       <Card className="w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <CardHeader className="flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -174,5 +352,13 @@ export function Popup(): JSX.Element {
         </CardBody>
       </Card>
     </div>
+  );
+}
+
+export function Popup(): JSX.Element {
+  return (
+    <MiddlewareProvider>
+      <PopupContent />
+    </MiddlewareProvider>
   );
 }
