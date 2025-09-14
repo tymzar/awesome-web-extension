@@ -4,6 +4,7 @@ import {
 } from "./modules/middleware/middleware.types";
 import type {
   ContentMessageResponse,
+  DOMMessage,
   PostColorsMessage,
   RequestMessage,
 } from "./modules/middleware/middleware.types";
@@ -20,7 +21,9 @@ function handleMessage(
   sender: chrome.runtime.MessageSender,
   sendResponse: (response: ContentMessageResponse) => void
 ): void {
-  console.log("[content.js]. Message received", message);
+  console.log(
+    `[content.js]. Message received ${message.type}, from ${sender.url}`
+  );
 
   let response: ContentMessageResponse = {
     message: {
@@ -65,7 +68,7 @@ function handleMessage(
         clearExistingBoxes();
 
         if (colors.length > 0) {
-          colors.forEach((color, index) => {
+          for (const [index, color] of colors.entries()) {
             const box = document.createElement("div");
             box.style.backgroundColor = color;
             box.style.position = "fixed";
@@ -78,7 +81,7 @@ function handleMessage(
 
             document.body.append(box);
             colorBoxes.push(box); // Store reference for cleanup
-          });
+          }
         }
 
         response = {
@@ -99,16 +102,16 @@ function handleMessage(
         break;
       }
 
-      default:
-        throw new Error(`Unknown message type: ${message.type}`);
+      default: {
+        throw new Error(
+          `Unknown message type: ${(message as DOMMessage).type}`
+        );
+      }
     }
 
     console.log("[content.js]. Message response", response);
     sendResponse(response);
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error occurred";
-
     response = {
       message: {
         status: STATUS_RESPONSE.ERROR,
@@ -124,7 +127,7 @@ function handleMessage(
 function clearExistingBoxes(): void {
   // Remove boxes by class name
   const existingBoxes = document.querySelectorAll(".extension-color-box");
-  existingBoxes.forEach((box) => box.remove());
+  for (const box of existingBoxes) box.remove();
 
   // Clear the array
   colorBoxes = [];

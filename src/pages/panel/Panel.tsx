@@ -81,7 +81,13 @@ export function Panel(): JSX.Element {
   };
 
   return (
-    <div className="h-full p-4 bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="h-full p-4">
+      <h1
+        data-testid="extension-panel-title"
+        className="text-2xl font-bold text-gray-800 dark:text-white mb-6"
+      >
+        Extension Panel
+      </h1>
       <Card className="w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <CardHeader className="flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -173,7 +179,6 @@ export function Panel(): JSX.Element {
                 color="primary"
                 variant="flat"
                 size="sm"
-                startContent={<Icon icon="mdi:plus" />}
                 onPress={addElement}
                 isDisabled={elements.length >= elementsLimit}
               >
@@ -183,7 +188,6 @@ export function Panel(): JSX.Element {
                 color="secondary"
                 variant="flat"
                 size="sm"
-                startContent={<Icon icon="mdi:refresh" />}
                 onPress={refreshElements}
               >
                 Refresh
@@ -193,7 +197,6 @@ export function Panel(): JSX.Element {
                   color="danger"
                   variant="flat"
                   size="sm"
-                  startContent={<Icon icon="mdi:delete" />}
                   onPress={clearElements}
                 >
                   Clear All

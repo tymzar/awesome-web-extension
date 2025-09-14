@@ -5,6 +5,7 @@ import type {
   RequestMessage,
   MiddlewareState,
   MiddlewareActions,
+  DOMMessage,
 } from "./middleware.types";
 import {
   MESSAGE_TYPES,
@@ -14,8 +15,8 @@ import {
 
 const initialState: MiddlewareState = {
   isLoading: false,
-  error: null,
-  lastResponse: null,
+  error: undefined,
+  lastResponse: undefined,
   colorBoxes: [],
 };
 
@@ -32,54 +33,62 @@ function middlewareReducer(
   action: MiddlewareActions
 ): MiddlewareState {
   switch (action.type) {
-    case ACTION_TYPES.SET_LOADING:
+    case ACTION_TYPES.SET_LOADING: {
       return {
         ...state,
         isLoading: action.payload,
-        error: action.payload ? null : state.error,
+        error: action.payload ? undefined : state.error,
       };
+    }
 
-    case ACTION_TYPES.SET_ERROR:
+    case ACTION_TYPES.SET_ERROR: {
       return {
         ...state,
         isLoading: false,
         error: action.payload,
       };
+    }
 
-    case ACTION_TYPES.SET_SUCCESS:
+    case ACTION_TYPES.SET_SUCCESS: {
       return {
         ...state,
         isLoading: false,
-        error: null,
+        error: undefined,
         lastResponse: action.payload,
       };
+    }
 
-    case ACTION_TYPES.ADD_COLOR_BOX:
+    case ACTION_TYPES.ADD_COLOR_BOX: {
       return {
         ...state,
         colorBoxes: [...state.colorBoxes, action.payload],
       };
+    }
 
-    case ACTION_TYPES.REMOVE_COLOR_BOX:
+    case ACTION_TYPES.REMOVE_COLOR_BOX: {
       return {
         ...state,
         colorBoxes: state.colorBoxes.filter((box) => box.id !== action.payload),
       };
+    }
 
-    case ACTION_TYPES.CLEAR_COLOR_BOXES:
+    case ACTION_TYPES.CLEAR_COLOR_BOXES: {
       return {
         ...state,
         colorBoxes: [],
       };
+    }
 
-    case ACTION_TYPES.SET_RESPONSE:
+    case ACTION_TYPES.SET_RESPONSE: {
       return {
         ...state,
         lastResponse: action.payload,
       };
+    }
 
-    default:
+    default: {
       return state;
+    }
   }
 }
 
@@ -222,7 +231,7 @@ export function useMiddlewareReducer() {
             clearColorBoxes();
 
             if (colors.length > 0) {
-              colors.forEach((color, index) => {
+              for (const [index, color] of colors.entries()) {
                 const box = document.createElement("div");
                 box.style.backgroundColor = color;
                 box.style.position = "fixed";
@@ -237,7 +246,7 @@ export function useMiddlewareReducer() {
 
                 const boxId = `color-box-${Date.now()}-${index}`;
                 addColorBox(boxId, color, box);
-              });
+              }
             }
 
             response = {
@@ -252,7 +261,8 @@ export function useMiddlewareReducer() {
             const existingBoxes = document.querySelectorAll(
               ".extension-color-box"
             );
-            existingBoxes.forEach((box) => box.remove());
+
+            for (const box of existingBoxes) box.remove();
 
             clearColorBoxes();
 
@@ -264,8 +274,11 @@ export function useMiddlewareReducer() {
             break;
           }
 
-          default:
-            throw new Error(`Unknown message type: ${(message as any).type}`);
+          default: {
+            throw new Error(
+              `Unknown message type: ${(message as DOMMessage).type}`
+            );
+          }
         }
 
         setSuccess(response);

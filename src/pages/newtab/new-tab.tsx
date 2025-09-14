@@ -1,12 +1,5 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Divider,
-  Input,
-} from "@heroui/react";
-import React, { Fragment, useState } from "react";
+import { Button, Card, CardBody, CardHeader, Input } from "@heroui/react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 
 export function NewTab(): JSX.Element {
@@ -23,7 +16,7 @@ export function NewTab(): JSX.Element {
   };
 
   return (
-    <div className="min-h-screen p-8 bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen p-8 ">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -32,7 +25,10 @@ export function NewTab(): JSX.Element {
               icon="mdi:extension"
               className="text-4xl text-indigo-600 dark:text-indigo-400"
             />
-            <h1 className="text-4xl font-bold text-gray-800 dark:text-white">
+            <h1
+              data-testid="extension-newtab-title"
+              className="text-4xl font-bold text-gray-800 dark:text-white"
+            >
               Extension New Tab
             </h1>
           </div>
@@ -53,8 +49,8 @@ export function NewTab(): JSX.Element {
               <Input
                 placeholder="Search the web..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                onChange={(error) => setSearchQuery(error.target.value)}
+                onKeyDown={(error) => error.key === "Enter" && handleSearch()}
                 startContent={
                   <Icon
                     icon="mdi:web"

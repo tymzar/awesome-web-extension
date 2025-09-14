@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 import { clean } from "esbuild-plugin-clean";
 import { htmlPlugin } from "@craftamap/esbuild-plugin-html";
 import postCssPlugin from "esbuild-style-plugin";
@@ -15,7 +15,7 @@ function makeHtmlEntries(paths: Array<string>) {
 
   return [
     ...paths,
-    ...(isDevelopment ? ["src/pages/utils/esbuildHotReload.ts"] : []),
+    ...(isDevelopment ? ["src/pages/utils/esbuild-hot-reload.ts"] : []),
   ];
 }
 
@@ -36,7 +36,7 @@ const config: BuildOptions = {
     ];
 
     if (isDevelopment) {
-      baseEntries.push("./src/pages/utils/esbuildHotReload.ts");
+      baseEntries.push("./src/pages/utils/esbuild-hot-reload.ts");
     }
 
     return baseEntries;
@@ -113,7 +113,7 @@ async function createEsbuildContext(
   return esbuild.context(options);
 }
 
-/* eslint-disable unicorn/prefer-top-level-await, no-console */
+ 
 function main() {
   const isDevelopment = process.env.NODE_ENV !== "production";
 

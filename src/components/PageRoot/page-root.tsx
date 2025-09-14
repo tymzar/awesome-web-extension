@@ -14,7 +14,7 @@ import {
   Tooltip,
 } from "chart.js";
 
-type ApplicationRootProps = {
+type ApplicationRootProperties = {
   children: React.ReactNode;
 };
 
@@ -36,7 +36,7 @@ Chart.register(
   Legend
 );
 
-export function PageRoot({ children }: ApplicationRootProps): JSX.Element {
+export function PageRoot({ children }: ApplicationRootProperties): JSX.Element {
   return (
     <HeroUIProvider>
       <ToastProvider />

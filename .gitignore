@@ -10,3 +10,12 @@ build
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# ESLint
+.eslintcache

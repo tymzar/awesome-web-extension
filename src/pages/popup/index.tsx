@@ -1,11 +1,9 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import { PageRoot } from "../../components/PageRoot/PageRoot";
-import { Popup } from "./Popup";
+import { PageRoot } from "../../components/PageRoot/page-root";
+import { Popup } from "./popup";
 
-// Note: 'root' is the preferred id here,
-// you won't have to configure Modal component if you use 'root' document.
 const container = document.querySelector("#root");
 
 if (!container) {

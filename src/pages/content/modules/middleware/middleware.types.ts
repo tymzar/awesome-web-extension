@@ -47,8 +47,8 @@ export type ContentMessageResponse = {
 // New types for useReducer
 export interface MiddlewareState {
   isLoading: boolean;
-  error: string | null;
-  lastResponse: ContentMessageResponse | null;
+  error: string | undefined;
+  lastResponse: ContentMessageResponse | undefined;
   colorBoxes: Array<{
     id: string;
     color: string;
@@ -70,7 +70,7 @@ export type ActionTypes = keyof typeof ACTION_TYPES;
 
 export interface MiddlewareAction {
   type: ActionTypes;
-  payload?: any;
+  payload?: unknown;
 }
 
 export interface SetLoadingAction extends MiddlewareAction {

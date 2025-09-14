@@ -9,158 +9,22 @@ import {
   Input,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
-import {
-  MiddlewareProvider,
-  useMiddleware,
-} from "../content/modules/middleware";
-import { MESSAGE_TYPES } from "../content/modules/middleware/middleware.types";
+import { MiddlewareProvider } from "../content/modules/middleware";
 
-type OptionsProps = {
+type OptionsProperties = {
   title: string;
 };
 
-// Component that demonstrates middleware usage in Options
-function MiddlewareDemo(): JSX.Element {
-  const { state, actions } = useMiddleware();
+const notify = () => {
+  addToast({
+    title: "Settings Saved",
+    description: "Your settings have been saved successfully!",
+  });
+};
 
-  const handleSendColors = () => {
-    const colors = ["#ff6b6b", "#4ecdc4", "#45b7d1", "#96ceb4", "#feca57"];
-
-    // Send message to active tab's content script
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: MESSAGE_TYPES.POST_COLORS,
-          colors,
-        });
-      }
-    });
-  };
-
-  const handleGetBody = () => {
-    // Send message to active tab's content script
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: MESSAGE_TYPES.GET_BODY,
-        });
-      }
-    });
-  };
-
-  const handleClearBoxes = () => {
-    // Send message to active tab's content script
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          type: MESSAGE_TYPES.CLEAR_BOXES,
-        });
-      }
-    });
-  };
-
-  return (
-    <Card className="mb-8 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-blue-200 dark:border-blue-800">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <Icon
-            icon="mdi:code-braces"
-            className="text-2xl text-blue-600 dark:text-blue-400"
-          />
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
-            Middleware Demo (useReducer)
-          </h2>
-        </div>
-      </CardHeader>
-      <Divider className="bg-blue-200 dark:bg-blue-700" />
-      <CardBody>
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-              <Icon icon="mdi:loading" className="text-blue-500" />
-              <span>
-                <strong>Loading:</strong> {state.isLoading ? "Yes" : "No"}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-              <Icon icon="mdi:alert-circle" className="text-red-500" />
-              <span>
-                <strong>Error:</strong> {state.error || "None"}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-              <Icon icon="mdi:palette" className="text-green-500" />
-              <span>
-                <strong>Color Boxes:</strong> {state.colorBoxes.length}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex gap-3">
-            <Button
-              color="primary"
-              variant="flat"
-              onPress={handleSendColors}
-              startContent={<Icon icon="mdi:palette" />}
-            >
-              Send Color Palette
-            </Button>
-            <Button
-              color="secondary"
-              variant="flat"
-              onPress={handleGetBody}
-              startContent={<Icon icon="mdi:web" />}
-            >
-              Get Page Body
-            </Button>
-            <Button
-              color="danger"
-              variant="flat"
-              onPress={handleClearBoxes}
-              startContent={<Icon icon="mdi:delete" />}
-            >
-              Clear Color Boxes
-            </Button>
-          </div>
-
-          {state.lastResponse && (
-            <div className="p-3 bg-gray-100 dark:bg-gray-700 rounded-lg">
-              <div className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Last Response:
-              </div>
-              <div className="text-xs text-gray-600 dark:text-gray-400 font-mono">
-                Status: {JSON.stringify(state.lastResponse.message.status)}
-              </div>
-              {"title" in state.lastResponse.message && (
-                <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                  <strong>Page Title:</strong>{" "}
-                  {state.lastResponse.message.title}
-                </div>
-              )}
-              {"body" in state.lastResponse.message && (
-                <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                  <strong>Body Length:</strong>{" "}
-                  {state.lastResponse.message.body.length} characters
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </CardBody>
-    </Card>
-  );
-}
-
-function OptionsContent({ title }: OptionsProps): JSX.Element {
+function OptionsContent({ title }: OptionsProperties): JSX.Element {
   const [maxLength, setMaxLength] = useState("5");
   const [currentElements, setCurrentElements] = useState<Array<string>>([]);
-
-  const notify = () => {
-    addToast({
-      title: "Settings Saved",
-      description: "Your settings have been saved successfully!",
-    });
-  };
 
   useEffect(() => {
     console.log("Options: useEffect running, loading from storage...");
@@ -207,7 +71,7 @@ function OptionsContent({ title }: OptionsProps): JSX.Element {
   }, []);
 
   const handleSave = () => {
-    const newMaxLength = parseInt(maxLength);
+    const newMaxLength = Number.parseInt(maxLength);
 
     // Check if current elements exceed the new limit
     if (currentElements.length > newMaxLength) {
@@ -259,7 +123,7 @@ function OptionsContent({ title }: OptionsProps): JSX.Element {
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <Card className="mb-8 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
@@ -288,11 +152,12 @@ function OptionsContent({ title }: OptionsProps): JSX.Element {
           </CardBody>
         </Card>
 
-        <h1 className="capitalize text-3xl font-bold text-gray-800 dark:text-white mb-8 transition-colors">
+        <h1
+          data-testid="extension-options-title"
+          className="capitalize text-3xl font-bold text-gray-800 dark:text-white mb-8 transition-colors"
+        >
           {title}
         </h1>
-
-        <MiddlewareDemo />
 
         {/* General Settings */}
         <Card className="mb-8 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
@@ -309,7 +174,7 @@ function OptionsContent({ title }: OptionsProps): JSX.Element {
                   label="Maximum Elements"
                   placeholder="Enter max elements limit"
                   value={maxLength}
-                  onChange={(e) => setMaxLength(e.target.value)}
+                  onChange={(error) => setMaxLength(error.target.value)}
                   description={`Maximum number of elements the extension can store. Current: ${currentElements.length} elements`}
                   type="number"
                   min="1"
@@ -468,7 +333,7 @@ function OptionsContent({ title }: OptionsProps): JSX.Element {
   );
 }
 
-export function Options({ title }: OptionsProps): JSX.Element {
+export function Options({ title }: OptionsProperties): JSX.Element {
   return (
     <MiddlewareProvider>
       <OptionsContent title={title} />

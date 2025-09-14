@@ -5,8 +5,8 @@ if (document) {
 
   const eventSource = new EventSource(ESBUILD_EVENT_SOURCE);
 
-  eventSource.addEventListener('change', function () {
-    console.log('Esbuild change detected - reloading!');
-    window.location.reload();
+  eventSource.addEventListener("change", function () {
+    console.log("Esbuild change detected - reloading!");
+    globalThis.location.reload();
   });
 }

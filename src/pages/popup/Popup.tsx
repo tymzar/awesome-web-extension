@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import type { PostColorsMessage } from "../content/modules/middleware/middleware.types";
 import { MESSAGE_TYPES } from "../content/modules/middleware/middleware.types";
 import {
   MiddlewareProvider,
@@ -104,16 +103,19 @@ function MiddlewareDemo(): JSX.Element {
   };
 
   return (
-    <Card className="mb-4 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+    <Card className="my-4 bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
       <CardHeader>
-        <div className="flex items-center gap-2">
-          <Icon
-            icon="mdi:code-braces"
-            className="text-xl text-blue-600 dark:text-blue-400"
-          />
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
-            Middleware Demo (useReducer)
-          </h3>
+        <div className="flex flex-col justify-center gap-2">
+          <div className="flex items-center gap-2">
+            <Icon
+              icon="mdi:code-braces"
+              width={24}
+              className=" text-blue-600 dark:text-blue-400"
+            />
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+              Middleware Demo
+            </h3>
+          </div>
           <div className="text-xs text-gray-500 dark:text-gray-400">
             Open a web page first, then try the buttons
           </div>
@@ -140,7 +142,6 @@ function MiddlewareDemo(): JSX.Element {
               color="primary"
               variant="flat"
               onPress={handleSendColors}
-              startContent={<Icon icon="mdi:palette" />}
             >
               Send Colors
             </Button>
@@ -149,7 +150,6 @@ function MiddlewareDemo(): JSX.Element {
               color="secondary"
               variant="flat"
               onPress={handleGetBody}
-              startContent={<Icon icon="mdi:web" />}
             >
               Get Body
             </Button>
@@ -158,7 +158,6 @@ function MiddlewareDemo(): JSX.Element {
               color="danger"
               variant="flat"
               onPress={handleClearBoxes}
-              startContent={<Icon icon="mdi:delete" />}
             >
               Clear Boxes
             </Button>
@@ -194,8 +193,11 @@ function PopupContent(): JSX.Element {
 
   useEffect(() => {
     chrome.storage.sync.get(["maxLength", "elements"], function (result) {
-      setElementsLimit(result.maxLength ?? 1);
-      setElements(result.elements ?? []);
+      const limit = result.maxLength ?? 1;
+      const storageElements = result.elements ?? [];
+
+      setElementsLimit(limit);
+      setElements(storageElements);
     });
 
     // Listen for storage changes
@@ -207,7 +209,8 @@ function PopupContent(): JSX.Element {
       // Handle elements changes
       if (changes.elements) {
         console.log("Popup: Elements changed to:", changes.elements.newValue);
-        setElements(changes.elements.newValue ?? []);
+        const newElements = changes.elements.newValue ?? [];
+        setElements(newElements);
       }
 
       // Handle maxLength changes
@@ -216,7 +219,8 @@ function PopupContent(): JSX.Element {
           "Popup: Max length changed to:",
           changes.maxLength.newValue
         );
-        setElementsLimit(changes.maxLength.newValue ?? 1);
+        const newLimit = changes.maxLength.newValue ?? 1;
+        setElementsLimit(newLimit);
       }
     };
 
@@ -252,8 +256,7 @@ function PopupContent(): JSX.Element {
   };
 
   return (
-    <div className="h-full p-4 bg-gray-50 dark:bg-gray-900 transition-colors">
-      <MiddlewareDemo />
+    <div className="h-full p-4">
       <Card className="w-full bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <CardHeader className="flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -261,7 +264,10 @@ function PopupContent(): JSX.Element {
               icon="mdi:extension"
               className="text-2xl text-blue-600 dark:text-blue-400"
             />
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+            <h3
+              className="text-lg font-semibold text-gray-800 dark:text-white"
+              data-testid="extension-popup-title"
+            >
               Extension Popup
             </h3>
           </div>
@@ -351,6 +357,7 @@ function PopupContent(): JSX.Element {
           </div>
         </CardBody>
       </Card>
+      <MiddlewareDemo />
     </div>
   );
 }

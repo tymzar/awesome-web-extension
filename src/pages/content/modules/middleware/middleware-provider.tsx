@@ -11,7 +11,9 @@ interface MiddlewareContextType {
   actions: ReturnType<typeof useMiddlewareReducer>["actions"];
 }
 
-const MiddlewareContext = createContext<MiddlewareContextType | null>(null);
+const MiddlewareContext = createContext<MiddlewareContextType | undefined>(
+  undefined
+);
 
 /**
  * React context provider component that manages middleware state and message handling.
@@ -30,7 +32,8 @@ export function MiddlewareProvider({
   const { state, actions, handleMessage } = useMiddlewareReducer();
 
   useEffect(() => {
-    const isExtensionPage = window.location.protocol === "chrome-extension:";
+    const isExtensionPage =
+      globalThis.location.protocol === "chrome-extension:";
 
     if (isExtensionPage) {
       console.log(

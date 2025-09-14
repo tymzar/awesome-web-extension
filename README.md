@@ -211,6 +211,78 @@ The middleware is demonstrated in:
 - **Popup**: Shows middleware state and provides buttons to test functionality
 - **Options**: Displays middleware state with enhanced UI and color palette sending
 
+## DevTools Panels Setup
+
+### Understanding the Directory Structure
+
+- **`src/pages/devtools/`** - Creates DevTools panels for debugging
+
+  - `index.ts` - Creates panel using `chrome.devtools.panels.create()`
+  - `render.tsx` - React entry point
+  - `DevTools.tsx` - Debugging interface component
+
+- **`src/pages/panel/`** - Regular extension page (popup/options style)
+  - `index.tsx` - React entry point
+  - `Panel.tsx` - Functional interface component
+
+### Quick Setup
+
+1. **Create DevTools panel script** (`src/pages/devtools/index.ts`):
+
+```typescript
+chrome.devtools.panels.create(
+  "Extension DevTools",
+  "32x32.png",
+  "devtools/devtools.html"
+);
+```
+
+2. **Create React entry** (`src/pages/devtools/render.tsx`):
+
+```typescript
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { PageRoot } from "../../components/PageRoot/PageRoot";
+import { DevTools } from "./DevTools";
+
+const root = createRoot(document.querySelector("#root")!);
+root.render(
+  <PageRoot>
+    <DevTools />
+  </PageRoot>
+);
+```
+
+3. **Update build config** (`scripts/esbuild.config.ts`):
+
+```typescript
+entryPoints: [
+  "./src/pages/devtools/index.ts",
+  "./src/pages/devtools/render.tsx",
+],
+```
+
+4. **Add to manifest** (`src/manifest.json`):
+
+```json
+{ "devtools_page": "devtools/devtools.html" }
+```
+
+### Accessing Panels
+
+- Load extension → Open Chrome DevTools (F12) → Look for extension tab
+
+### Avoiding Build Conflicts
+
+Use different output names if files conflict:
+
+```typescript
+entryPoints: [
+  { in: "./src/pages/devtools/index.ts", out: "devtools/panel-creator" },
+  "./src/pages/devtools/render.tsx",
+],
+```
+
 ## Links
 
 - [Chrome Extension documentation](https://developer.chrome.com/extensions/getstarted)
