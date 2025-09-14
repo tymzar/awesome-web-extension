@@ -31,7 +31,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@heroui/react": "^2.8.2",
+    "@heroui/react": "^2.8.4",
     "@iconify/react": "^6.0.0",
     "chart.js": "4.4.0",
     "framer-motion": "^12.23.12",
