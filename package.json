@@ -46,7 +46,7 @@
     "@types/react-dom": "18.2.15",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
-    "autoprefixer": "10.4.16",
+    "autoprefixer": "10.4.21",
     "dotenv-cli": "7.2.1",
     "esbuild": "0.18.0",
     "esbuild-plugin-clean": "1.0.1",
