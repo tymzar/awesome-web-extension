@@ -1,0 +1,53 @@
+name: Package Chrome Extension
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    strategy:
+      matrix:
+        node-version: [22.19.0, 24.8.0]
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup Yarn
+        uses: threeal/setup-yarn-action@v2.0.0
+        with:
+          version: 4.9.3
+          cache: true
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+
+      - name: Install all dependencies
+        run: yarn --immutable-cache
+
+      - name: Build Chrome
+        run: yarn build
+        env:
+          NODE_ENV: production
+
+      - name: Upload Chrome extension artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-${{ matrix.node-version }}
+          path: build
