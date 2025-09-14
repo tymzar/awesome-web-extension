@@ -1,0 +1,41 @@
+services:
+  playwright-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      # Mount test results directory for accessing reports
+      - ./test-results:/app/test-results
+      - ./playwright-report:/app/playwright-report
+      # Mount snapshot directories so they're written to local filesystem
+      - ./e2e-tests:/app/e2e-tests
+    environment:
+      - CI=true
+      - HEADLESS=true
+    # Optional: Run tests with specific configuration
+    command: yarn test:e2e --reporter=html
+
+  # Alternative service for running tests in headed mode (for debugging)
+  playwright-tests-headed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./test-results:/app/test-results
+      - ./playwright-report:/app/playwright-report
+      # Mount snapshot directories so they're written to local filesystem
+      - ./e2e-tests:/app/e2e-tests
+    environment:
+      - CI=false
+      - HEADLESS=false
+    # Use xvfb for virtual display in Docker
+    command: xvfb-run -a yarn test:e2e --reporter=html
+    depends_on:
+      - xvfb
+
+  # Virtual display service for headed mode
+  xvfb:
+    image: selenium/standalone-chrome:latest
+    environment:
+      - DISPLAY=:99
+    command: Xvfb :99 -screen 0 1024x768x24
