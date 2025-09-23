@@ -1,5 +1,5 @@
 {
-  "name": "chrome-extension-boilerplate",
+  "name": "starter-web-extension",
   "version": "1.0.0",
   "description": "A web extension boilerplate with React 18, Webpack 5, and Webpack Dev Server 4",
   "license": "UNLICENSED",
@@ -21,6 +21,8 @@
   "scripts": {
     "start": "dotenv -e .env.local node scripts/esbuild.config.ts",
     "build": "dotenv -e .env node scripts/esbuild.config.ts",
+    "build:binary": "node scripts/build-binary.ts",
+    "prepublishOnly": "yarn build:binary",
     "lint": "eslint --cache --no-error-on-unmatched-pattern --ext ts,tsx {src,scripts}",
     "lint:fix": "yarn lint --fix",
     "format": "prettier --no-editorconfig src/**/*.* --check",
@@ -29,12 +31,30 @@
     "test:docker": "docker compose up playwright-tests --build",
     "test:docker:update-snapshots": "docker compose run --rm playwright-tests yarn test:e2e --update-snapshots",
     "prettier:fix": "prettier --no-editorconfig src/'**/*.{ts,tsx,js,css,html,md}' --write",
-    "knip": "knip"
+    "knip": "knip",
+    "semantic-release": "semantic-release"
   },
   "type": "module",
+  "bin": "./bin/create-web-extension.js",
+  "files": [
+    "bin/",
+    "src/",
+    "e2e-tests/",
+    "scripts/",
+    "eslint.config.js",
+    "knip.config.ts",
+    "playwright.config.ts",
+    "postcss.config.mjs",
+    "tailwind.config.js",
+    "tsconfig.json",
+    "Dockerfile",
+    "docker-compose.yml",
+    ".gitignore"
+  ],
   "dependencies": {
     "@heroui/react": "^2.8.2",
     "@iconify/react": "^6.0.0",
+    "@inquirer/prompts": "^5.0.0",
     "chart.js": "4.4.0",
     "framer-motion": "^12.23.12",
     "react": "18.2.0",
@@ -43,6 +63,12 @@
   "devDependencies": {
     "@craftamap/esbuild-plugin-html": "0.6.1",
     "@playwright/test": "^1.55.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^11.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^9.2.6",
+    "@semantic-release/npm": "^10.0.4",
+    "@semantic-release/release-notes-generator": "^12.1.0",
     "@types/chrome": "^0.1.11",
     "@types/node": "^24.4.0",
     "@types/react": "18.2.37",
@@ -62,6 +88,7 @@
     "knip": "^5.63.1",
     "postcss": "^8.5.6",
     "prettier": "2.8.3",
+    "semantic-release": "^22.0.12",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.9.2"
   },

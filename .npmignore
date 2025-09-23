@@ -1,0 +1,37 @@
+# Development files
+node_modules/
+.git/
+.github/
+.vscode/
+.idea/
+
+# Build outputs
+build/
+dist/
+*.log
+
+# Environment files
+.env*
+!.env.example
+
+# Test files
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# Documentation
+README.md
+RELEASE.md
+CHANGELOG.md
+
+# Lock files (keep yarn.lock for consistency)
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
