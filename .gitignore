@@ -19,3 +19,7 @@ build
 
 # ESLint
 .eslintcache
+
+# JS files
+*.js
+*.cjs
