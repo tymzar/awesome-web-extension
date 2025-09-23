@@ -2,20 +2,6 @@ name: Release
 
 on:
   workflow_dispatch:
-    inputs:
-      release_type:
-        description: "Type of release"
-        required: true
-        default: "production"
-        type: choice
-        options:
-          - production
-          - release-candidate
-      branch:
-        description: "Branch to release from"
-        required: true
-        default: "master"
-        type: string
 
 jobs:
   install-dependencies:
@@ -24,7 +10,6 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v5
         with:
-          ref: ${{ github.event.inputs.branch }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -55,14 +40,15 @@ jobs:
           name: node-modules
           path: node_modules/
 
-  lint:
+  lint-build-test:
     needs: install-dependencies
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout source code
         uses: actions/checkout@v5
         with:
-          ref: ${{ github.event.inputs.branch }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Yarn
         uses: threeal/setup-yarn-action@v2.0.0
@@ -91,33 +77,6 @@ jobs:
       - name: Run dead code check
         run: yarn knip --production
 
-  build:
-    needs: install-dependencies
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.inputs.branch }}
-
-      - name: Setup Yarn
-        uses: threeal/setup-yarn-action@v2.0.0
-        with:
-          version: 4.9.3
-          cache: true
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22.19.0
-          cache: "yarn"
-
-      - name: Download node_modules
-        uses: actions/download-artifact@v4
-        with:
-          name: node-modules
-          path: node_modules/
-
       - name: Build binary
         run: yarn build:binary
 
@@ -132,46 +91,18 @@ jobs:
           name: build-files
           path: build/
 
-  test:
-    needs: build
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout source code
-        uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.inputs.branch }}
-
-      - name: Setup Yarn
-        uses: threeal/setup-yarn-action@v2.0.0
-        with:
-          version: 4.9.3
-          cache: true
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v5
-        with:
-          node-version: 22.19.0
-          cache: "yarn"
-
-      - name: Download node_modules
-        uses: actions/download-artifact@v4
-        with:
-          name: node-modules
-          path: node_modules/
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-files
-          path: build/
-
       - name: Run tests with Docker
         run: yarn test:docker
 
   release:
     name: Release
-    needs: [lint, test]
+    needs: [lint-build-test]
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      packages: write
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -179,7 +110,6 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v5
         with:
-          ref: ${{ github.event.inputs.branch }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -202,12 +132,7 @@ jobs:
           path: node_modules/
 
       - name: Semantic Release
-        run: |
-          if [ "${{ github.event.inputs.release_type }}" = "release-candidate" ]; then
-            yarn semantic-release --branches="${{ github.event.inputs.branch }}"
-          else
-            yarn semantic-release
-          fi
+        run: yarn semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

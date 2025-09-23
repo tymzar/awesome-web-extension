@@ -49,7 +49,12 @@
     "tsconfig.json",
     "Dockerfile",
     "docker-compose.yml",
-    ".gitignore"
+    ".gitignore",
+    ".yarnrc.yml",
+    ".env.example",
+    ".github/dependabot.yml",
+    ".github/workflows/pull-request-check.yml",
+    ".github/workflows/package-extension.yml"
   ],
   "dependencies": {
     "@heroui/react": "^2.8.2",
