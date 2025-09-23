@@ -1,6 +1,6 @@
 {
   "name": "starter-web-extension",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A web extension boilerplate with React 18, Webpack 5, and Webpack Dev Server 4",
   "license": "UNLICENSED",
   "engines": {
@@ -49,7 +49,12 @@
     "tsconfig.json",
     "Dockerfile",
     "docker-compose.yml",
-    ".gitignore"
+    ".gitignore",
+    ".yarnrc.yml",
+    ".env.example",
+    ".github/dependabot.yml",
+    ".github/workflows/pull-request-check.yml",
+    ".github/workflows/package-extension.yml"
   ],
   "dependencies": {
     "@heroui/react": "^2.8.2",
@@ -61,14 +66,14 @@
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@craftamap/esbuild-plugin-html": "0.6.1",
-    "@playwright/test": "^1.55.0",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/commit-analyzer": "^11.1.0",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^9.2.6",
-    "@semantic-release/npm": "^10.0.4",
-    "@semantic-release/release-notes-generator": "^12.1.0",
+    "@craftamap/esbuild-plugin-html": "0.9.0",
+    "@playwright/test": "1.55.1",
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/commit-analyzer": "13.0.1",
+    "@semantic-release/git": "10.0.1",
+    "@semantic-release/github": "11.0.6",
+    "@semantic-release/npm": "12.0.2",
+    "@semantic-release/release-notes-generator": "14.1.0",
     "@types/chrome": "^0.1.11",
     "@types/node": "^24.4.0",
     "@types/react": "18.2.37",
@@ -85,12 +90,12 @@
     "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-unicorn": "^61.0.2",
-    "knip": "^5.63.1",
+    "knip": "5.64.0",
     "postcss": "^8.5.6",
     "prettier": "2.8.3",
-    "semantic-release": "^22.0.12",
+    "semantic-release": "24.2.7",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5.9.2"
+    "typescript": "5.9.2"
   },
   "packageManager": "yarn@4.9.3+sha512.8295ee814f6b253e16f516416481b481a215ed03ef1ae38524d108084872560a9ed75aeb23b91ab64222062ac4149a594150ae538c2a9536fdbcefd4e49b11cc"
 }
