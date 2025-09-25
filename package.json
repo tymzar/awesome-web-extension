@@ -1,8 +1,8 @@
 {
   "name": "starter-web-extension",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "A web extension boilerplate with React 18, Webpack 5, and Webpack Dev Server 4",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "engines": {
     "node": ">22.7.0"
   },
@@ -57,11 +57,11 @@
     ".github/workflows/package-extension.yml"
   ],
   "dependencies": {
-    "@heroui/react": "^2.8.2",
-    "@iconify/react": "^6.0.0",
-    "@inquirer/prompts": "^5.0.0",
-    "chart.js": "4.4.0",
-    "framer-motion": "^12.23.12",
+    "@heroui/react": "2.8.4",
+    "@iconify/react": "6.0.2",
+    "@inquirer/prompts": "7.8.6",
+    "chart.js": "4.5.0",
+    "framer-motion": "12.23.12",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
@@ -74,7 +74,7 @@
     "@semantic-release/github": "11.0.6",
     "@semantic-release/npm": "12.0.2",
     "@semantic-release/release-notes-generator": "14.1.0",
-    "@types/chrome": "^0.1.11",
+    "@types/chrome": "0.1.12",
     "@types/node": "^24.4.0",
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
@@ -87,11 +87,11 @@
     "esbuild-plugin-copy": "2.1.1",
     "esbuild-style-plugin": "1.6.3",
     "eslint": "9.35.0",
-    "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-unicorn": "^61.0.2",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-unicorn": "61.0.2",
     "knip": "5.64.0",
-    "postcss": "^8.5.6",
+    "postcss": "8.5.6",
     "prettier": "2.8.3",
     "semantic-release": "24.2.7",
     "tailwindcss": "^3.4.0",
