@@ -1,6 +1,6 @@
 {
   "name": "starter-web-extension",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A web extension boilerplate with React 18, Webpack 5, and Webpack Dev Server 4",
   "license": "MIT",
   "engines": {

@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/tymzar/starter-web-extension/compare/v1.0.0...v1.0.1) (2025-09-25)
+
+
+### Bug Fixes
+
+* Add missing template creation from readme ([5155831](https://github.com/tymzar/starter-web-extension/commit/5155831896d232f18cc00f327b9b3579111f0e26))
+
 # 1.0.0 (2025-09-25)
 
 
