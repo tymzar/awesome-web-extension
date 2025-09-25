@@ -1,5 +1,15 @@
 # Boilerplate for Manifest v3 Chrome extensions
 
+## Create from a template
+
+You can create a new repository using this template by using the binary below:
+
+```console
+npx starter-web-extension
+# or
+yarn create starter-web-extension
+```
+
 ## Tech stack
 
 - React **18**
